@@ -3,26 +3,30 @@ package sandbox.spaceplanner;
 import org.springframework.stereotype.Component;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 @Component
 class ShapesManager {
 
-    private final List<MutableShape> shapes = Arrays.asList(new MutableShape.Rect(60, 120), new MutableShape.Rect(120, 60));
+    private final LinkedList<MutableShape> shapes = new LinkedList<>();
 
     void forEach(Consumer<Shape> consumer) {
         getShapes().forEach(consumer::accept);
     }
 
-    private Collection<MutableShape> getShapes() {
+    void addShape(MutableShape shape) {
+        shapes.add(shape);
+    }
+
+    private List<MutableShape> getShapes() {
         return shapes;
     }
 
     Optional<MutableShape> findTopmostAt(float xInCm, float yInCm) {
+        //todo: find last
         return getShapes().stream().filter(s -> s.contains(xInCm, yInCm)).findFirst();
+
     }
 }

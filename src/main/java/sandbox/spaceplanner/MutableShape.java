@@ -9,8 +9,8 @@ public interface MutableShape extends Shape {
 
     class Rect extends Rectangle2D.Double implements MutableShape {
 
-        Rect(int w, int h) {
-            super(0, 0, w, h);
+        Rect(float x, float y, int w, int h) {
+            super(x, y, w, h);
         }
 
         @Override
