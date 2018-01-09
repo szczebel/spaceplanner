@@ -13,7 +13,7 @@ import java.awt.*;
 class Canvas extends JPanel {
 
     @Autowired
-    private ShapesManager shapesManager;
+    private ElementManager elementManager;
     @Autowired
     private CanvasProperties canvasProperties;
 
@@ -27,18 +27,13 @@ class Canvas extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        paintGrid((Graphics2D) g.create(), canvasProperties.getGridSpacingInCm(), canvasProperties.getPixelsPerCm());
         paintShapes((Graphics2D) g.create(), canvasProperties.getPixelsPerCm());
+        paintGrid((Graphics2D) g.create(), canvasProperties.getGridSpacingInCm(), canvasProperties.getPixelsPerCm());
     }
 
     private void paintShapes(Graphics2D g, Float pixelsPerCm) {
         g.scale(pixelsPerCm, pixelsPerCm);
-        shapesManager.forEach(s -> {
-            g.setPaint(Color.green);
-            g.fill(s);
-            g.setPaint(Color.red);
-            g.draw(s);
-        });
+        elementManager.forEach(s -> s.render(g));
         g.dispose();
     }
 
