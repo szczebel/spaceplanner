@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
 
+//todo grid on/off
+
 @Component
 class Canvas extends JPanel {
 

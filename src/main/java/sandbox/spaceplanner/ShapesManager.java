@@ -29,4 +29,8 @@ class ShapesManager {
         return getShapes().stream().filter(s -> s.contains(xInCm, yInCm)).findFirst();
 
     }
+
+    void removeShape(MutableShape shape) {
+        shapes.remove(shape);
+    }
 }
