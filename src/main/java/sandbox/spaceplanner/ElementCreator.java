@@ -21,6 +21,9 @@ public class ElementCreator {
         addAndRepaint(new RenderableElement.SolidBox(x, y, length, 10));
     }
 
+    void addOutline(float x, float y, int w, int h) {
+        addAndRepaint(new RenderableElement.Outline(x, y, w, h));
+    }
 
     void addCabinet(float x, float y, int w, int h) {
         addAndRepaint(new RenderableElement.Texture(x, y, w, h, "/img/wood.png"));

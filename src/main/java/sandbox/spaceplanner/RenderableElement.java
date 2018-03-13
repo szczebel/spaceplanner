@@ -18,6 +18,8 @@ public interface RenderableElement {
 
     Rectangle2D getBounds2D();
 
+    RenderableElement copy();
+
     abstract class AbstractRenderable extends Rectangle2D.Double implements RenderableElement {
 
 
@@ -28,6 +30,11 @@ public interface RenderableElement {
         @Override
         public void setLocation(double x, double y) {
             super.setFrame(x, y, getWidth(), getHeight());
+        }
+
+        @Override
+        public RenderableElement copy() {
+            return (RenderableElement) clone();
         }
     }
 
@@ -43,6 +50,19 @@ public interface RenderableElement {
             g.fill(this);
 //            g.setPaint(Color.red);
 //            g.draw(this);
+        }
+    }
+
+    class Outline extends AbstractRenderable {
+
+        Outline(float x, float y, int w, int h) {
+            super(x, y, w, h);
+        }
+
+        @Override
+        public void render(Graphics2D g) {
+            g.setPaint(Color.green);
+            g.draw(this);
         }
     }
 

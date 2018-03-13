@@ -20,7 +20,7 @@ class Canvas extends JPanel {
     @PostConstruct
     void init() {
         setPreferredSize(new Dimension(5000, 5000));
-        setBackground(Color.black);
+//        setBackground(Color.black);
         canvasProperties.whenChanged(this::repaint);
     }
 

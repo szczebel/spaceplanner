@@ -2,12 +2,14 @@ package sandbox.spaceplanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import swingutils.layout.LayoutBuilders;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static javax.swing.JOptionPane.*;
@@ -49,6 +51,16 @@ public class CanvasRightClick extends MouseAdapter {
                 action("Cabinet 60x60", () -> elementCreator.addCabinet(xInCm, yInCm, 60, 60)),
                 action("Cabinet 45x60", () -> elementCreator.addCabinet(xInCm, yInCm, 45, 60))
         ));
+        popupMenu.add(submenu("Add outline",
+                action("45x45", () -> elementCreator.addOutline(xInCm, yInCm, 45, 45)),
+                action("45x100", () -> elementCreator.addOutline(xInCm, yInCm, 45, 100)),
+                action("45x150", () -> elementCreator.addOutline(xInCm, yInCm, 45, 150)),
+                action("45x200", () -> elementCreator.addOutline(xInCm, yInCm, 45, 200)),
+                action("90x30", () -> elementCreator.addOutline(xInCm, yInCm, 90, 30)),
+                action("90x25", () -> elementCreator.addOutline(xInCm, yInCm, 90, 25)),
+                action("90x20", () -> elementCreator.addOutline(xInCm, yInCm, 90, 20)),
+                action("Any...", () -> createOutline((w,h) -> elementCreator.addOutline(xInCm, yInCm, w.intValue(), h.intValue())))
+        ));
         addSelectionMenu(popupMenu, xInCm, yInCm);
         popupMenu.show(canvas, e.getX(), e.getY());
     }
@@ -58,6 +70,12 @@ public class CanvasRightClick extends MouseAdapter {
                 .findTopmostAt(xInCm, yInCm)
                 .ifPresent(element -> {
                     popupMenu.addSeparator();
+                    popupMenu.add(action("Copy", () -> {
+                        RenderableElement copy = element.copy();
+                        copy.setLocation(xInCm, yInCm);
+                        elementManager.add(copy);
+                        canvas.repaint();//todo: canvas should observe elementManager, listen to shape added/deleted and repaint accordingly
+                    }));
                     popupMenu.add(action("Delete", () -> {
                         elementManager.remove(element);
                         canvas.repaint();//todo: canvas should observe elementManager, listen to shape added/deleted and repaint accordingly
@@ -75,6 +93,20 @@ public class CanvasRightClick extends MouseAdapter {
         SpinnerNumberModel spinnerModel = new SpinnerNumberModel(300, 1, 1000, 10);
         if (OK_OPTION == showConfirmDialog(canvas.getParent(), new JSpinner(spinnerModel), "Wall length in cm?", OK_CANCEL_OPTION)) {
             creator.accept(spinnerModel.getNumber());
+        }
+    }
+
+    private void createOutline(BiConsumer<Number, Number> creator) {
+        SpinnerNumberModel w = new SpinnerNumberModel(300, 1, 1000, 10);
+        SpinnerNumberModel h = new SpinnerNumberModel(300, 1, 1000, 10);
+        if (OK_OPTION == showConfirmDialog(
+                canvas.getParent(),
+                LayoutBuilders.vBox(4,
+                        new JSpinner(w),
+                        new JSpinner(h)
+                ),
+                "Sizes in cm?", OK_CANCEL_OPTION)) {
+            creator.accept(w.getNumber(), h.getNumber());
         }
     }
 }
