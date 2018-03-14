@@ -53,7 +53,15 @@ public class CanvasDragAndDrop extends MouseAdapter {
         draggedShape.ifPresent(shape -> {
             float xInCm = e.getX() / canvasProperties.getPixelsPerCm();
             float yInCm = e.getY() / canvasProperties.getPixelsPerCm();
-            shape.setLocation(xInCm - xOffset, yInCm - yOffset);
+
+            //todo: snap to grid on or off
+            double newX = xInCm - xOffset;
+            double newY = yInCm - yOffset;
+            //if snap to grid {
+            newX -= newX%canvasProperties.getGridSpacingInCm();
+            newY -= newY%canvasProperties.getGridSpacingInCm();
+
+            shape.setLocation(newX, newY);
             canvas.repaint();
         });
     }

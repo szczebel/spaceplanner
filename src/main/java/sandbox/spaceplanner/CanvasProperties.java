@@ -13,10 +13,12 @@ class CanvasProperties {
             Float.valueOf(10.0f),
             Float.valueOf(0.1f));
 
-    SpinnerNumberModel gridSpinnerModel = new SpinnerNumberModel(60, 10, 1000, 1);
+    SpinnerNumberModel gridSpinnerModel = new SpinnerNumberModel(60, 1, 1000, 1);
 
-    Float getGridSpacingInCm() {
-        return gridSpinnerModel.getNumber().floatValue();
+    ButtonModel gridPainted = new JToggleButton.ToggleButtonModel();
+
+    int getGridSpacingInCm() {
+        return gridSpinnerModel.getNumber().intValue();
     }
 
     Float getPixelsPerCm() {
@@ -26,5 +28,6 @@ class CanvasProperties {
     void whenChanged(Runnable action) {
         scaleSpinnerModel.addChangeListener(e -> action.run());
         gridSpinnerModel.addChangeListener(e -> action.run());
+        gridPainted.addChangeListener(e -> action.run());
     }
 }

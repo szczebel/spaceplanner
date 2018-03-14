@@ -32,11 +32,14 @@ public class MainFrame extends RichFrame implements SwingEntryPoint {
     }
 
     private JComponent toolbar() {
+        JCheckBox gridPainted = new JCheckBox("Grid on/off");
+        gridPainted.setModel(canvasProperties.gridPainted);
         return flowLayout(
                 label("Scale (pixels per cm):"),
                 new JSpinner(canvasProperties.scaleSpinnerModel),
                 label("Grid size (cm):"),
-                new JSpinner(canvasProperties.gridSpinnerModel)
+                new JSpinner(canvasProperties.gridSpinnerModel),
+                gridPainted
         );
     }
 }

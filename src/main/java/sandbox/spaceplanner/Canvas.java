@@ -20,7 +20,7 @@ class Canvas extends JPanel {
     @PostConstruct
     void init() {
         setPreferredSize(new Dimension(5000, 5000));
-//        setBackground(Color.black);
+        setBackground(Color.white);
         canvasProperties.whenChanged(this::repaint);
     }
 
@@ -28,7 +28,8 @@ class Canvas extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintShapes((Graphics2D) g.create(), canvasProperties.getPixelsPerCm());
-        paintGrid((Graphics2D) g.create(), canvasProperties.getGridSpacingInCm(), canvasProperties.getPixelsPerCm());
+        if(canvasProperties.gridPainted.isSelected())
+            paintGrid((Graphics2D) g.create(), canvasProperties.getGridSpacingInCm(), canvasProperties.getPixelsPerCm());
     }
 
     private void paintShapes(Graphics2D g, Float pixelsPerCm) {
@@ -37,7 +38,7 @@ class Canvas extends JPanel {
         g.dispose();
     }
 
-    private void paintGrid(Graphics2D g, Float gridSpacingInCm, Float pixelsPerCm) {
+    private void paintGrid(Graphics2D g, int gridSpacingInCm, Float pixelsPerCm) {
         g.setColor(Color.RED);
         Stroke dashed = new BasicStroke(1,
                 BasicStroke.CAP_BUTT,

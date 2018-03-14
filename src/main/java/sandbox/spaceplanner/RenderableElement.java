@@ -61,7 +61,7 @@ public interface RenderableElement {
 
         @Override
         public void render(Graphics2D g) {
-            g.setPaint(Color.green);
+            g.setPaint(Color.black);
             g.draw(this);
         }
     }
