@@ -11,12 +11,9 @@ import java.util.Optional;
 @Component
 public class CanvasDragAndDrop extends MouseAdapter {
 
-    @Autowired
-    private ElementManager elementManager;
-    @Autowired
-    private CanvasProperties canvasProperties;
-    @Autowired
-    private Canvas canvas;
+    @Autowired ElementManager elementManager;
+    @Autowired CanvasProperties canvasProperties;
+    @Autowired Canvas canvas;
 
     @PostConstruct
     void install() {
@@ -24,21 +21,19 @@ public class CanvasDragAndDrop extends MouseAdapter {
         canvas.addMouseMotionListener(this);
     }
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<RenderableElement> draggedShape = Optional.empty();
     private double xOffset;
     private double yOffset;
-
 
     @Override
     public void mousePressed(MouseEvent e) {
         float xInCm = e.getX() / canvasProperties.getPixelsPerCm();
         float yInCm = e.getY() / canvasProperties.getPixelsPerCm();
         draggedShape = elementManager.findTopmostAt(xInCm, yInCm);
-        if(draggedShape.isPresent()) {
+        draggedShape.ifPresent(shape -> {
             xOffset = xInCm - draggedShape.get().getBounds2D().getX();
             yOffset = yInCm - draggedShape.get().getBounds2D().getY();
-        }
+        });
     }
 
     @Override
