@@ -37,6 +37,12 @@ class ElementManager {
         fireChanged();
     }
 
+    public void replaceAllWith(List<RenderableElement> elements) {
+        this.elements.clear();
+        this.elements.addAll(elements);
+        fireChanged();
+    }
+
     List<Runnable> observers = new ArrayList<>();
     public void whenChanged(Runnable observer) {
         observers.add(observer);
