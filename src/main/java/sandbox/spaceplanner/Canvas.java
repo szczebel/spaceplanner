@@ -7,8 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
 
-//todo grid on/off
-
 @Component
 class Canvas extends JPanel {
 
@@ -22,6 +20,7 @@ class Canvas extends JPanel {
         setPreferredSize(new Dimension(5000, 5000));
         setBackground(Color.white);
         canvasProperties.whenChanged(this::repaint);
+        elementManager.whenChanged(this::repaint);
     }
 
     @Override

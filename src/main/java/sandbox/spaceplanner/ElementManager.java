@@ -2,6 +2,7 @@ package sandbox.spaceplanner;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +17,6 @@ class ElementManager {
         getElements().forEach(consumer);
     }
 
-    void add(RenderableElement element) {
-        elements.add(element);
-    }
-
     private List<RenderableElement> getElements() {
         return elements;
     }
@@ -30,7 +27,22 @@ class ElementManager {
 
     }
 
+    void add(RenderableElement element) {
+        elements.add(element);
+        fireChanged();
+    }
+
     void remove(RenderableElement shape) {
         elements.remove(shape);
+        fireChanged();
+    }
+
+    List<Runnable> observers = new ArrayList<>();
+    public void whenChanged(Runnable observer) {
+        observers.add(observer);
+    }
+
+    void fireChanged() {
+        observers.forEach(Runnable::run);
     }
 }

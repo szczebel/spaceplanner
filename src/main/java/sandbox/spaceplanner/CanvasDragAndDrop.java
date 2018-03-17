@@ -8,8 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Optional;
 
-//todo: snap to grid
-
 @Component
 public class CanvasDragAndDrop extends MouseAdapter {
 

@@ -8,17 +8,15 @@ import swingutils.spring.application.SwingEntryPoint;
 import javax.swing.*;
 import java.awt.*;
 
-import static swingutils.components.ComponentFactory.inScrollPane;
-import static swingutils.components.ComponentFactory.label;
+import static swingutils.components.ComponentFactory.*;
 import static swingutils.layout.LayoutBuilders.flowLayout;
 
 @Component
 public class MainFrame extends RichFrame implements SwingEntryPoint {
 
-    @Autowired
-    private Canvas canvas;
-    @Autowired
-    private CanvasProperties canvasProperties;
+    @Autowired Canvas canvas;
+    @Autowired CanvasProperties canvasProperties;
+    @Autowired FilePersister filePersister;
 
     @Override
     public void startInEdt() {
@@ -32,14 +30,20 @@ public class MainFrame extends RichFrame implements SwingEntryPoint {
     }
 
     private JComponent toolbar() {
-        JCheckBox gridPainted = new JCheckBox("Grid on/off");
-        gridPainted.setModel(canvasProperties.gridPainted);
         return flowLayout(
+                button("Load", filePersister::load),
+                button("Save", filePersister::save),
                 label("Scale (pixels per cm):"),
                 new JSpinner(canvasProperties.scaleSpinnerModel),
                 label("Grid size (cm):"),
                 new JSpinner(canvasProperties.gridSpinnerModel),
-                gridPainted
+                checkBox("Grid on/off", canvasProperties.gridPainted)
         );
+    }
+
+    private JCheckBox checkBox(String text, ButtonModel model) {
+        JCheckBox gridPainted = new JCheckBox(text);
+        gridPainted.setModel(model);
+        return gridPainted;
     }
 }

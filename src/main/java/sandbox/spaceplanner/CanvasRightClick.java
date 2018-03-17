@@ -74,11 +74,9 @@ public class CanvasRightClick extends MouseAdapter {
                         RenderableElement copy = element.copy();
                         copy.setLocation(xInCm, yInCm);
                         elementManager.add(copy);
-                        canvas.repaint();//todo: canvas should observe elementManager, listen to shape added/deleted and repaint accordingly
                     }));
                     popupMenu.add(action("Delete", () -> {
                         elementManager.remove(element);
-                        canvas.repaint();//todo: canvas should observe elementManager, listen to shape added/deleted and repaint accordingly
                     }));
                 });
     }
