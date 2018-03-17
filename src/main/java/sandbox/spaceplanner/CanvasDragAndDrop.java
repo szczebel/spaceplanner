@@ -60,7 +60,7 @@ public class CanvasDragAndDrop extends MouseAdapter {
             newY -= newY%canvasProperties.getGridSpacingInCm();
 
             shape.setLocation(newX, newY);
-            canvas.repaint();
+            canvas.repaint();//todo this should not be needed
         });
     }
 

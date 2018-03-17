@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
 class ElementManager {
 
@@ -22,8 +24,11 @@ class ElementManager {
     }
 
     Optional<RenderableElement> findTopmostAt(float xInCm, float yInCm) {
-        //todo: find last
-        return getElements().stream().filter(s -> s.contains(xInCm, yInCm)).findFirst();
+        List<RenderableElement> candidates = getElements().stream()
+                .filter(s -> s.contains(xInCm, yInCm))
+                .collect(toList());
+        if(candidates.size() == 0) return Optional.empty();
+        else return Optional.of(candidates.get(candidates.size()-1));
 
     }
 
