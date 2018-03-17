@@ -31,8 +31,8 @@ public class CanvasDragAndDrop extends MouseAdapter {
         float yInCm = e.getY() / canvasProperties.getPixelsPerCm();
         draggedShape = elementManager.findTopmostAt(xInCm, yInCm);
         draggedShape.ifPresent(shape -> {
-            xOffset = xInCm - draggedShape.get().getBounds2D().getX();
-            yOffset = yInCm - draggedShape.get().getBounds2D().getY();
+            xOffset = xInCm - shape.getBounds2D().getX();
+            yOffset = yInCm - shape.getBounds2D().getY();
         });
     }
 
