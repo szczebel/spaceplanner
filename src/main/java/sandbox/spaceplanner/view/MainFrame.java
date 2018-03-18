@@ -1,7 +1,9 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sandbox.spaceplanner.controller.FilePersister;
+import sandbox.spaceplanner.model.CanvasProperties;
 import swingutils.frame.RichFrame;
 import swingutils.spring.application.SwingEntryPoint;
 
@@ -14,9 +16,12 @@ import static swingutils.layout.LayoutBuilders.flowLayout;
 @Component
 public class MainFrame extends RichFrame implements SwingEntryPoint {
 
-    @Autowired Canvas canvas;
-    @Autowired CanvasProperties canvasProperties;
-    @Autowired FilePersister filePersister;
+    @Autowired
+    sandbox.spaceplanner.view.Canvas canvas;
+    @Autowired
+    CanvasProperties canvasProperties;
+    @Autowired
+    FilePersister filePersister;
 
     @Override
     public void startInEdt() {
@@ -34,10 +39,10 @@ public class MainFrame extends RichFrame implements SwingEntryPoint {
                 button("Load", filePersister::load),
                 button("Save", filePersister::save),
                 label("Scale (pixels per cm):"),
-                new JSpinner(canvasProperties.scaleSpinnerModel),
+                new JSpinner(canvasProperties.scaleSpinnerModel()),
                 label("Grid size (cm):"),
-                new JSpinner(canvasProperties.gridSpinnerModel),
-                checkBox("Grid on/off", canvasProperties.gridPainted)
+                new JSpinner(canvasProperties.gridSpinnerModel()),
+                checkBox("Grid on/off", canvasProperties.gridPainted())
         );
     }
 

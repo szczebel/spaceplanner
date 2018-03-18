@@ -1,14 +1,16 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sandbox.spaceplanner.model.CanvasProperties;
+import sandbox.spaceplanner.model.ElementManager;
 
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
 
 @Component
-class Canvas extends JPanel {
+public class Canvas extends JPanel {
 
     @Autowired
     private ElementManager elementManager;
@@ -27,7 +29,7 @@ class Canvas extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintShapes((Graphics2D) g.create(), canvasProperties.getPixelsPerCm());
-        if(canvasProperties.gridPainted.isSelected())
+        if(canvasProperties.isGridPainted())
             paintGrid((Graphics2D) g.create(), canvasProperties.getGridSpacingInCm(), canvasProperties.getPixelsPerCm());
     }
 

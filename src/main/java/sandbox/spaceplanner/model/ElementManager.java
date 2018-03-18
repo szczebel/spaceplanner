@@ -1,4 +1,4 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.model;
 
 import org.springframework.stereotype.Component;
 
@@ -11,11 +11,11 @@ import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
 
 @Component
-class ElementManager {
+public class ElementManager {
 
     private final LinkedList<RenderableElement> elements = new LinkedList<>();
 
-    void forEach(Consumer<RenderableElement> consumer) {
+    public void forEach(Consumer<RenderableElement> consumer) {
         getElements().forEach(consumer);
     }
 
@@ -23,7 +23,7 @@ class ElementManager {
         return elements;
     }
 
-    Optional<RenderableElement> findTopmostAt(float xInCm, float yInCm) {
+    public Optional<RenderableElement> findTopmostAt(float xInCm, float yInCm) {
         List<RenderableElement> candidates = getElements().stream()
                 .filter(s -> s.contains(xInCm, yInCm))
                 .collect(toList());
@@ -32,12 +32,12 @@ class ElementManager {
 
     }
 
-    void add(RenderableElement element) {
+    public void add(RenderableElement element) {
         elements.add(element);
         fireChanged();
     }
 
-    void remove(RenderableElement shape) {
+    public void remove(RenderableElement shape) {
         elements.remove(shape);
         fireChanged();
     }

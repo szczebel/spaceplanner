@@ -1,4 +1,4 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.model;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -61,7 +61,7 @@ public interface RenderableElement {
 
         @Override
         public void render(Graphics2D g) {
-            g.setPaint(Color.green);
+            g.setPaint(new Color(0,0,255,128));
             g.fill(this);
             g.setPaint(Color.black);
             g.draw(this);

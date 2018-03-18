@@ -1,11 +1,11 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.model;
 
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 
 @Component
-class CanvasProperties {
+public class CanvasProperties {
 
     SpinnerNumberModel scaleSpinnerModel = new SpinnerNumberModel(
             Float.valueOf(2f),
@@ -17,17 +17,33 @@ class CanvasProperties {
 
     ButtonModel gridPainted = new JToggleButton.ToggleButtonModel();
 
-    int getGridSpacingInCm() {
+    public int getGridSpacingInCm() {
         return gridSpinnerModel.getNumber().intValue();
     }
 
-    Float getPixelsPerCm() {
+    public Float getPixelsPerCm() {
         return scaleSpinnerModel.getNumber().floatValue();
     }
 
-    void whenChanged(Runnable action) {
+    public void whenChanged(Runnable action) {
         scaleSpinnerModel.addChangeListener(e -> action.run());
         gridSpinnerModel.addChangeListener(e -> action.run());
         gridPainted.addChangeListener(e -> action.run());
+    }
+
+    public boolean isGridPainted() {
+        return gridPainted.isSelected();
+    }
+
+    public SpinnerNumberModel scaleSpinnerModel() {
+        return scaleSpinnerModel;
+    }
+
+    public SpinnerNumberModel gridSpinnerModel() {
+        return gridSpinnerModel;
+    }
+
+    public ButtonModel gridPainted() {
+        return gridPainted;
     }
 }

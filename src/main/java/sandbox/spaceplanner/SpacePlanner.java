@@ -12,7 +12,7 @@ import java.io.IOException;
 public class SpacePlanner {
 
     public static void main(String[] args) throws IOException {
-        SwingApplicationBootstrap.beforeSpring();
+        SwingApplicationBootstrap.beforeSpring("/img/wood.png");
         new SpringApplicationBuilder(SpacePlanner.class).headless(false).run(args);
     }
 }

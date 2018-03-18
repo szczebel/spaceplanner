@@ -1,7 +1,12 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sandbox.spaceplanner.model.CanvasProperties;
+import sandbox.spaceplanner.model.ElementCreator;
+import sandbox.spaceplanner.model.ElementManager;
+import sandbox.spaceplanner.model.RenderableElement;
+import sandbox.spaceplanner.view.Canvas;
 import swingutils.layout.LayoutBuilders;
 
 import javax.annotation.PostConstruct;
@@ -18,14 +23,10 @@ import static swingutils.components.ComponentFactory.action;
 @Component
 public class CanvasRightClick extends MouseAdapter {
 
-    @Autowired
-    private ElementManager elementManager;
-    @Autowired
-    private ElementCreator elementCreator;
-    @Autowired
-    private CanvasProperties canvasProperties;
-    @Autowired
-    private Canvas canvas;
+    @Autowired ElementManager elementManager;
+    @Autowired ElementCreator elementCreator;
+    @Autowired CanvasProperties canvasProperties;
+    @Autowired Canvas canvas;
 
     @PostConstruct
     void install() {

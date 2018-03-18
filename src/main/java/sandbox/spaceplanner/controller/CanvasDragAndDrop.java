@@ -1,7 +1,11 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sandbox.spaceplanner.model.CanvasProperties;
+import sandbox.spaceplanner.model.ElementManager;
+import sandbox.spaceplanner.model.RenderableElement;
+import sandbox.spaceplanner.view.Canvas;
 
 import javax.annotation.PostConstruct;
 import java.awt.event.MouseAdapter;
@@ -12,7 +16,7 @@ import java.util.Optional;
 public class CanvasDragAndDrop extends MouseAdapter {
 
     @Autowired ElementManager elementManager;
-    @Autowired CanvasProperties canvasProperties;
+    @Autowired  CanvasProperties canvasProperties;
     @Autowired Canvas canvas;
 
     @PostConstruct

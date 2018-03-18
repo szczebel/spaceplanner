@@ -1,7 +1,9 @@
-package sandbox.spaceplanner;
+package sandbox.spaceplanner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sandbox.spaceplanner.model.ElementManager;
+import sandbox.spaceplanner.model.RenderableElement;
 
 import javax.swing.*;
 import java.io.*;
