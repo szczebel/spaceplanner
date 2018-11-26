@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.2.RELEASE</version>
+        <version>2.0.2.RELEASE</version>
     </parent>
 
     <groupId>sandbox</groupId>
@@ -35,9 +35,9 @@
         </dependency>
 
         <dependency>
-            <groupId>swingtools</groupId>
+            <groupId>sandbox</groupId>
             <artifactId>swingutils</artifactId>
-            <version>2.0.1</version>
+            <version>2.0.7</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework</groupId>

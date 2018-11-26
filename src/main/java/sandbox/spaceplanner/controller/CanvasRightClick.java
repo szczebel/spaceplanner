@@ -7,6 +7,7 @@ import sandbox.spaceplanner.model.ElementCreator;
 import sandbox.spaceplanner.model.ElementManager;
 import sandbox.spaceplanner.model.RenderableElement;
 import sandbox.spaceplanner.view.Canvas;
+import sandbox.spaceplanner.view.PaintSelector;
 import swingutils.layout.LayoutBuilders;
 
 import javax.annotation.PostConstruct;
@@ -27,6 +28,7 @@ public class CanvasRightClick extends MouseAdapter {
     @Autowired ElementCreator elementCreator;
     @Autowired CanvasProperties canvasProperties;
     @Autowired Canvas canvas;
+    @Autowired PaintSelector paintSelector;
 
     @PostConstruct
     void install() {
@@ -60,26 +62,23 @@ public class CanvasRightClick extends MouseAdapter {
                 action("90x30", () -> elementCreator.addOutline(xInCm, yInCm, 90, 30)),
                 action("90x25", () -> elementCreator.addOutline(xInCm, yInCm, 90, 25)),
                 action("90x20", () -> elementCreator.addOutline(xInCm, yInCm, 90, 20)),
-                action("Any...", () -> createOutline((w,h) -> elementCreator.addOutline(xInCm, yInCm, w.intValue(), h.intValue())))
+                action("Any...", () -> createOutline((w, h) -> elementCreator.addOutline(xInCm, yInCm, w.intValue(), h.intValue())))
         ));
-        addSelectionMenu(popupMenu, xInCm, yInCm);
+        elementManager
+                .findTopmostAt(xInCm, yInCm)
+                .ifPresent(selection -> addSelectionMenu(selection, popupMenu, xInCm, yInCm));
         popupMenu.show(canvas, e.getX(), e.getY());
     }
 
-    private void addSelectionMenu(JPopupMenu popupMenu, float xInCm, float yInCm) {
-        elementManager
-                .findTopmostAt(xInCm, yInCm)
-                .ifPresent(element -> {
-                    popupMenu.addSeparator();
-                    popupMenu.add(action("Copy", () -> {
-                        RenderableElement copy = element.copy();
-                        copy.setLocation(xInCm, yInCm);
-                        elementManager.add(copy);
-                    }));
-                    popupMenu.add(action("Delete", () -> {
-                        elementManager.remove(element);
-                    }));
-                });
+    private void addSelectionMenu(RenderableElement selection, JPopupMenu popupMenu, float xInCm, float yInCm) {
+        final ElementActions actions = new ElementActions(elementManager, selection, xInCm, yInCm);
+        popupMenu.add(submenu("Selection",
+                action("Copy", actions::copySelection),
+                action("Delete", actions::deleteSelection),
+                action("Change fill", actions::changeFillOfSelection),
+                action("Change outline", actions::changeOutlineOfSelection)
+        ));
+
     }
 
     private JMenu submenu(String name, Action... actions) {
@@ -106,6 +105,41 @@ public class CanvasRightClick extends MouseAdapter {
                 ),
                 "Sizes in cm?", OK_CANCEL_OPTION)) {
             creator.accept(w.getNumber(), h.getNumber());
+        }
+    }
+
+    class ElementActions {
+        final ElementManager elementManager;
+        final RenderableElement selection;
+        final float xInCm;
+        final float yInCm;
+
+        ElementActions(ElementManager elementManager, RenderableElement selection, float xInCm, float yInCm) {
+            this.elementManager = elementManager;
+            this.selection = selection;
+            this.xInCm = xInCm;
+            this.yInCm = yInCm;
+        }
+
+        void copySelection() {
+            RenderableElement copy = selection.copy();
+            copy.setLocation(xInCm, yInCm);
+            elementManager.add(copy);
+        }
+
+        void deleteSelection() {
+            elementManager.remove(selection);
+        }
+
+        void changeFillOfSelection() {
+            paintSelector.choosePaint().ifPresent(selection::setFill);
+            elementManager.fireChanged();
+
+        }
+
+        void changeOutlineOfSelection() {
+            paintSelector.choosePaint().ifPresent(selection::setOutline);
+            elementManager.fireChanged();
         }
     }
 }

@@ -53,7 +53,7 @@ public class ElementManager {
         observers.add(observer);
     }
 
-    void fireChanged() {
+    public void fireChanged() {
         observers.forEach(Runnable::run);
     }
 }

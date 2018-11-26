@@ -1,12 +1,8 @@
 package sandbox.spaceplanner.model;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import static swingutils.components.ComponentFactory.icon;
 
 public interface RenderableElement {
 
@@ -20,11 +16,34 @@ public interface RenderableElement {
 
     RenderableElement copy();
 
-    abstract class AbstractRenderable extends Rectangle2D.Double implements RenderableElement {
+    void setFill(Paint fill);
+    void setOutline(Paint outline);
 
+    class Renderer {
 
-        AbstractRenderable(float x, float y, int w, int h) {
+        static void render(Shape shape, Paint fill, Paint outline, Graphics2D g) {
+            if(fill != null) {
+                g.setPaint(fill);
+                g.fill(shape);
+            }
+            if(outline != null) {
+                g.setPaint(outline);
+                g.draw(shape);
+            }
+        }
+    }
+
+    class Box extends Rectangle2D.Double implements RenderableElement {
+        private Paint fill = Color.white;
+        private Paint outline = Color.black;
+
+        Box(float x, float y, int w, int h) {
             super(x, y, w, h);
+        }
+
+        @Override
+        public void render(Graphics2D g) {
+            Renderer.render(this, fill, outline ,g);
         }
 
         @Override
@@ -36,71 +55,15 @@ public interface RenderableElement {
         public RenderableElement copy() {
             return (RenderableElement) clone();
         }
-    }
 
-    class SolidBox extends AbstractRenderable {
-
-        SolidBox(float x, float y, int w, int h) {
-            super(x, y, w, h);
+        @Override
+        public void setFill(Paint fill) {
+            this.fill = fill;
         }
 
         @Override
-        public void render(Graphics2D g) {
-            g.setPaint(Color.green);
-            g.fill(this);
-//            g.setPaint(Color.red);
-//            g.draw(this);
+        public void setOutline(Paint outline) {
+            this.outline = outline;
         }
     }
-
-    class Outline extends AbstractRenderable {
-
-        Outline(float x, float y, int w, int h) {
-            super(x, y, w, h);
-        }
-
-        @Override
-        public void render(Graphics2D g) {
-            g.setPaint(new Color(0,0,255,128));
-            g.fill(this);
-            g.setPaint(Color.black);
-            g.draw(this);
-        }
-    }
-
-    class Icon extends AbstractRenderable {
-
-        final Image icon;
-
-        Icon(float x, float y, int w, int h, String resourceName) {
-            super(x, y, w, h);
-            this.icon = icon(resourceName).getImage();
-        }
-
-        @Override
-        public void render(Graphics2D g) {
-            g.drawImage(icon, getBounds().x, getBounds().y, getBounds().width, getBounds().height, null);
-        }
-    }
-
-    class Texture extends AbstractRenderable {
-
-        final BufferedImage icon;
-
-        Texture(float x, float y, int w, int h, String resourceName) {
-            super(x, y, w, h);
-            try {
-                this.icon = ImageIO.read(getClass().getResource(resourceName));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void render(Graphics2D g) {
-            g.setPaint(new TexturePaint(icon, new Rectangle(0,0,158,111)));
-            g.fill(this);
-        }
-    }
-
 }
