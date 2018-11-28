@@ -18,6 +18,8 @@ public interface RenderableElement {
 
     void setFill(Fill fill);
     void setOutline(Paint outline);
+    int getZ();
+    void setZ(int zOrder);
 
     class Renderer {
 
@@ -33,6 +35,7 @@ public interface RenderableElement {
     class Box extends Rectangle2D.Double implements RenderableElement {
         private Fill fill = Fill.withPaint(Color.white);
         private Paint outline = Color.black;
+        private int zOrder;
 
         Box(float x, float y, int w, int h) {
             super(x, y, w, h);
@@ -61,6 +64,14 @@ public interface RenderableElement {
         @Override
         public void setOutline(Paint outline) {
             this.outline = outline;
+        }
+
+        public int getZ() {
+            return zOrder;
+        }
+
+        public void setZ(int zOrder) {
+            this.zOrder = zOrder;
         }
     }
 }

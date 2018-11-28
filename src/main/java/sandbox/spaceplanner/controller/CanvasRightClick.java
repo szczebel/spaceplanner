@@ -2,10 +2,13 @@ package sandbox.spaceplanner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sandbox.spaceplanner.model.*;
+import sandbox.spaceplanner.model.CanvasProperties;
+import sandbox.spaceplanner.model.ElementManager;
+import sandbox.spaceplanner.model.Fill;
+import sandbox.spaceplanner.model.RenderableElement;
 import sandbox.spaceplanner.view.Canvas;
-import sandbox.spaceplanner.view.FillSelector;
 import sandbox.spaceplanner.view.ColorSelector;
+import sandbox.spaceplanner.view.FillSelector;
 import swingutils.layout.LayoutBuilders;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +17,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static javax.swing.JOptionPane.*;
 import static swingutils.components.ComponentFactory.action;
@@ -23,7 +25,6 @@ import static swingutils.components.ComponentFactory.action;
 public class CanvasRightClick extends MouseAdapter {
 
     @Autowired ElementManager elementManager;
-    @Autowired ElementCreator elementCreator;
     @Autowired CanvasProperties canvasProperties;
     @Autowired Canvas canvas;
     @Autowired ColorSelector colorSelector;
@@ -44,24 +45,18 @@ public class CanvasRightClick extends MouseAdapter {
         float yInCm = e.getY() / canvasProperties.getPixelsPerCm();
 
         JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(submenu("Add wall",
-                action("Vertical wall", () -> createWall(length -> elementCreator.addWallV(xInCm, yInCm, length.intValue()))),
-                action("Horizontal wall", () -> createWall(length -> elementCreator.addWallH(xInCm, yInCm, length.intValue())))
-        ));
-        popupMenu.add(submenu("Add furniture",
-                action("Fridge", () -> elementCreator.addFridge(xInCm, yInCm)),
-                action("Cabinet 60x60", () -> elementCreator.addCabinet(xInCm, yInCm, 60, 60)),
-                action("Cabinet 45x60", () -> elementCreator.addCabinet(xInCm, yInCm, 45, 60))
-        ));
-        popupMenu.add(submenu("Add outline",
-                action("45x45", () -> elementCreator.addOutline(xInCm, yInCm, 45, 45)),
-                action("45x100", () -> elementCreator.addOutline(xInCm, yInCm, 45, 100)),
-                action("45x150", () -> elementCreator.addOutline(xInCm, yInCm, 45, 150)),
-                action("45x200", () -> elementCreator.addOutline(xInCm, yInCm, 45, 200)),
-                action("90x30", () -> elementCreator.addOutline(xInCm, yInCm, 90, 30)),
-                action("90x25", () -> elementCreator.addOutline(xInCm, yInCm, 90, 25)),
-                action("90x20", () -> elementCreator.addOutline(xInCm, yInCm, 90, 20)),
-                action("Any...", () -> createOutline((w, h) -> elementCreator.addOutline(xInCm, yInCm, w.intValue(), h.intValue())))
+        popupMenu.add(submenu("New",
+                action("60x60", () -> elementManager.addBox(xInCm, yInCm, 60, 60)),
+                action("60x30", () -> elementManager.addBox(xInCm, yInCm, 60, 30)),
+                action("30x30", () -> elementManager.addBox(xInCm, yInCm, 30, 30)),
+                action("45x45", () -> elementManager.addBox(xInCm, yInCm, 45, 45)),
+                action("45x100", () -> elementManager.addBox(xInCm, yInCm, 45, 100)),
+                action("45x150", () -> elementManager.addBox(xInCm, yInCm, 45, 150)),
+                action("45x200", () -> elementManager.addBox(xInCm, yInCm, 45, 200)),
+                action("90x30", () -> elementManager.addBox(xInCm, yInCm, 90, 30)),
+                action("90x25", () -> elementManager.addBox(xInCm, yInCm, 90, 25)),
+                action("90x20", () -> elementManager.addBox(xInCm, yInCm, 90, 20)),
+                action("Other...", () -> newBox((w, h) -> elementManager.addBox(xInCm, yInCm, w.intValue(), h.intValue())))
         ));
         elementManager
                 .findTopmostAt(xInCm, yInCm)
@@ -87,14 +82,7 @@ public class CanvasRightClick extends MouseAdapter {
         return menu;
     }
 
-    private void createWall(Consumer<Number> creator) {
-        SpinnerNumberModel spinnerModel = new SpinnerNumberModel(300, 1, 1000, 10);
-        if (OK_OPTION == showConfirmDialog(canvas.getParent(), new JSpinner(spinnerModel), "Wall length in cm?", OK_CANCEL_OPTION)) {
-            creator.accept(spinnerModel.getNumber());
-        }
-    }
-
-    private void createOutline(BiConsumer<Number, Number> creator) {
+    private void newBox(BiConsumer<Number, Number> creator) {
         SpinnerNumberModel w = new SpinnerNumberModel(300, 1, 1000, 10);
         SpinnerNumberModel h = new SpinnerNumberModel(300, 1, 1000, 10);
         if (OK_OPTION == showConfirmDialog(

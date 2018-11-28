@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -32,8 +33,13 @@ public class ElementManager {
 
     }
 
+    public void addBox(float x, float y, int w, int h) {
+        add(new RenderableElement.Box(x, y, w, h));
+    }
+
     public void add(RenderableElement element) {
         elements.add(element);
+        elements.sort(comparingInt(RenderableElement::getZ));
         fireChanged();
     }
 
@@ -45,6 +51,7 @@ public class ElementManager {
     public void replaceAllWith(List<RenderableElement> elements) {
         this.elements.clear();
         this.elements.addAll(elements);
+        elements.sort(comparingInt(RenderableElement::getZ));
         fireChanged();
     }
 
