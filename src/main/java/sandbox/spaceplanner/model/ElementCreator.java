@@ -10,7 +10,7 @@ public class ElementCreator {
 
     public void addFridge(float x, float y) {
         RenderableElement.Box f = new RenderableElement.Box(x, y, 60, 60);
-//        f.setFill();//todo: find a Paint for this image: "/img/fridge.jpg"
+//        f.setFill();//todo: find a Paint for this imageFile: "/img/fridge.jpg"
         add(f);
     }
 

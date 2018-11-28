@@ -8,11 +8,11 @@ import java.awt.*;
 import java.util.Optional;
 
 @Component
-public class PaintSelector {
+public class ColorSelector {
 
     @Autowired JComponent mainFrame;
 
-    public Optional<Paint> choosePaint() {
-        return Optional.ofNullable(JColorChooser.showDialog(mainFrame, "Pick a fill", null));
+    public Optional<Paint> chooseColor() {
+        return Optional.ofNullable(JColorChooser.showDialog(mainFrame, "Pick a color", null));
     }
 }

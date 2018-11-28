@@ -16,16 +16,13 @@ public interface RenderableElement {
 
     RenderableElement copy();
 
-    void setFill(Paint fill);
+    void setFill(Fill fill);
     void setOutline(Paint outline);
 
     class Renderer {
 
-        static void render(Shape shape, Paint fill, Paint outline, Graphics2D g) {
-            if(fill != null) {
-                g.setPaint(fill);
-                g.fill(shape);
-            }
+        static void render(Shape shape, Fill fill, Paint outline, Graphics2D g) {
+            if(fill !=null) fill.render(g, shape);
             if(outline != null) {
                 g.setPaint(outline);
                 g.draw(shape);
@@ -34,7 +31,7 @@ public interface RenderableElement {
     }
 
     class Box extends Rectangle2D.Double implements RenderableElement {
-        private Paint fill = Color.white;
+        private Fill fill = Fill.withPaint(Color.white);
         private Paint outline = Color.black;
 
         Box(float x, float y, int w, int h) {
@@ -57,7 +54,7 @@ public interface RenderableElement {
         }
 
         @Override
-        public void setFill(Paint fill) {
+        public void setFill(Fill fill) {
             this.fill = fill;
         }
 

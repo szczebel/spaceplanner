@@ -15,13 +15,13 @@ import static javax.swing.JFileChooser.APPROVE_OPTION;
 @Component
 public class FilePersister {
 
-    @Autowired
-    ElementManager elementManager;
+    @Autowired ElementManager elementManager;
+    @Autowired JComponent mainFrame;
 
     JFileChooser fileChooser = new JFileChooser();
 
     public void load() {
-        if (APPROVE_OPTION == fileChooser.showOpenDialog(null)) {
+        if (APPROVE_OPTION == fileChooser.showOpenDialog(mainFrame)) {
             try {
                 loadFrom(fileChooser.getSelectedFile());
             } catch (IOException | ClassNotFoundException e) {
@@ -31,7 +31,7 @@ public class FilePersister {
     }
 
     public void save() {
-        if (APPROVE_OPTION == fileChooser.showSaveDialog(null)) {
+        if (APPROVE_OPTION == fileChooser.showSaveDialog(mainFrame)) {
             try {
                 saveAs(fileChooser.getSelectedFile());
             } catch (IOException e) {

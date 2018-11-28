@@ -2,12 +2,10 @@ package sandbox.spaceplanner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sandbox.spaceplanner.model.CanvasProperties;
-import sandbox.spaceplanner.model.ElementCreator;
-import sandbox.spaceplanner.model.ElementManager;
-import sandbox.spaceplanner.model.RenderableElement;
+import sandbox.spaceplanner.model.*;
 import sandbox.spaceplanner.view.Canvas;
-import sandbox.spaceplanner.view.PaintSelector;
+import sandbox.spaceplanner.view.FillSelector;
+import sandbox.spaceplanner.view.ColorSelector;
 import swingutils.layout.LayoutBuilders;
 
 import javax.annotation.PostConstruct;
@@ -28,7 +26,8 @@ public class CanvasRightClick extends MouseAdapter {
     @Autowired ElementCreator elementCreator;
     @Autowired CanvasProperties canvasProperties;
     @Autowired Canvas canvas;
-    @Autowired PaintSelector paintSelector;
+    @Autowired ColorSelector colorSelector;
+    @Autowired FillSelector fillSelector;
 
     @PostConstruct
     void install() {
@@ -75,7 +74,8 @@ public class CanvasRightClick extends MouseAdapter {
         popupMenu.add(submenu("Selection",
                 action("Copy", actions::copySelection),
                 action("Delete", actions::deleteSelection),
-                action("Change fill", actions::changeFillOfSelection),
+                action("Change color fill", actions::changeColorFillOfSelection),
+                action("Change image", actions::changeImageFillOfSelection),
                 action("Change outline", actions::changeOutlineOfSelection)
         ));
 
@@ -131,14 +131,21 @@ public class CanvasRightClick extends MouseAdapter {
             elementManager.remove(selection);
         }
 
-        void changeFillOfSelection() {
-            paintSelector.choosePaint().ifPresent(selection::setFill);
-            elementManager.fireChanged();
+        void changeColorFillOfSelection() {
+            fillSelector.chooseColorFill().ifPresent(this::applyFillToSelection);
+        }
 
+        void changeImageFillOfSelection() {
+            fillSelector.chooseImageFill().ifPresent(this::applyFillToSelection);
+        }
+
+        private void applyFillToSelection(Fill fill) {
+            selection.setFill(fill);
+            elementManager.fireChanged();
         }
 
         void changeOutlineOfSelection() {
-            paintSelector.choosePaint().ifPresent(selection::setOutline);
+            colorSelector.chooseColor().ifPresent(selection::setOutline);
             elementManager.fireChanged();
         }
     }
