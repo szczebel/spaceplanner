@@ -39,8 +39,7 @@ public class ElementManager {
 
     public void add(RenderableElement element) {
         elements.add(element);
-        elements.sort(comparingInt(RenderableElement::getZ));
-        fireChanged();
+        elementUpdated();
     }
 
     public void remove(RenderableElement shape) {
@@ -51,8 +50,7 @@ public class ElementManager {
     public void replaceAllWith(List<RenderableElement> elements) {
         this.elements.clear();
         this.elements.addAll(elements);
-        elements.sort(comparingInt(RenderableElement::getZ));
-        fireChanged();
+        elementUpdated();
     }
 
     List<Runnable> observers = new ArrayList<>();
@@ -62,5 +60,10 @@ public class ElementManager {
 
     public void fireChanged() {
         observers.forEach(Runnable::run);
+    }
+
+    public void elementUpdated() {
+        elements.sort(comparingInt(RenderableElement::getZ));
+        fireChanged();
     }
 }

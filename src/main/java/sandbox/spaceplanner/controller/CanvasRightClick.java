@@ -71,7 +71,9 @@ public class CanvasRightClick extends MouseAdapter {
                 action("Delete", actions::deleteSelection),
                 action("Change color fill", actions::changeColorFillOfSelection),
                 action("Change image", actions::changeImageFillOfSelection),
-                action("Change outline", actions::changeOutlineOfSelection)
+                action("Change outline", actions::changeOutlineOfSelection),
+                action("To front", actions::toFront),
+                action("To back", actions::toBack)
         ));
 
     }
@@ -129,12 +131,22 @@ public class CanvasRightClick extends MouseAdapter {
 
         private void applyFillToSelection(Fill fill) {
             selection.setFill(fill);
-            elementManager.fireChanged();
+            elementManager.elementUpdated();
         }
 
         void changeOutlineOfSelection() {
             colorSelector.chooseColor().ifPresent(selection::setOutline);
-            elementManager.fireChanged();
+            elementManager.elementUpdated();
+        }
+
+        void toFront() {
+            selection.setZ(selection.getZ() + 1);
+            elementManager.elementUpdated();
+        }
+
+        void toBack() {
+            selection.setZ(selection.getZ() - 1);
+            elementManager.elementUpdated();
         }
     }
 }
